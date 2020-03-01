@@ -1,11 +1,13 @@
 from random import seed
 from random import randint
 import time
-import keyboard
+#import keyboard
 import os
 
-wumpyX = 0;
-wumpyY = 0;
+wumpyX = 0
+wumpyY = 0
+wumpus = [0,0]
+smell = [0,0]
 '''
      todo:
      1: random map generation
@@ -48,7 +50,7 @@ def adjust_wumpus( w_adj, gold, wumpus ):
     print (wumpus[1])
     print (wumpyX)
     print (wumpyY)
-
+    
     return;
 def place_tile( board, coords, tile_name):
     x = coords[0]
@@ -66,7 +68,7 @@ def GenerateBoard(board):
     #eg: 1 2 3
     #    4 G 6
     #    7 8 9
-    wumpus = [0,0]
+    
     w_adj = randint(1,10)
     if w_adj == 5:  #regen if on gold tile
         w_adj = randint(1,10)
@@ -74,30 +76,101 @@ def GenerateBoard(board):
         adjust_wumpus(w_adj, gold,wumpus) #adj wumpus coords
     place_tile(board, wumpus, "WUMPUS")
 
+
     #place 3 pits
     pits = [0,0]
     breeze = [0,0]
-
+    #pit 1
     pits[0] = randint(1,3)
     pits[1] = randint(0,3)
     place_tile(board, pits, "PIT")
 
-	
-
+    #breeze tile allocation for pit 1
+    if (pits[0] < 3):
+        if (board[pits[0]+1][pits[1]] == "SAFE"):
+            breeze[0] = pits[0]+1
+            breeze[1] = pits[1]
+            place_tile(board, breeze, "BREEZE")
+    if (pits[0] > 0):
+        if (board[pits[0]-1][pits[1]] == "SAFE"):
+            breeze[0] = pits[0]-1
+            breeze[1] = pits[1]
+            place_tile(board, breeze, "BREEZE")
+    if (pits[1] < 3):
+        if (board[pits[0]][pits[1]+1] == "SAFE"):
+            breeze[0] = pits[0]
+            breeze[1] = pits[1]+1
+            place_tile(board, breeze, "BREEZE")
+    if (pits[1] > 0):
+        if (board[pits[0]][pits[1]-1] == "SAFE"):
+            breeze[0] = pits[0]
+            breeze[1] = pits[1]-1
+            place_tile(board, breeze, "BREEZE")
+    #pit 2
     pits[0] = randint(1,3)
     pits[1] = randint(0,3)
     place_tile(board, pits, "PIT")
+
+    #Breeze allocaiton for pit 2
+    if (pits[0] < 3):
+        if (board[pits[0]+1][pits[1]] == "SAFE"):
+            breeze[0] = pits[0]+1
+            breeze[1] = pits[1]
+            place_tile(board, breeze, "BREEZE")
+    if (pits[0] > 0):
+        if (board[pits[0]-1][pits[1]] == "SAFE"):
+            breeze[0] = pits[0]-1
+            breeze[1] = pits[1]
+            place_tile(board, breeze, "BREEZE")
+    if (pits[1] < 3):
+        if (board[pits[0]][pits[1]+1] == "SAFE"):
+            breeze[0] = pits[0]
+            breeze[1] = pits[1]+1
+            place_tile(board, breeze, "BREEZE")
+    if (pits[1] > 0):
+        if (board[pits[0]][pits[1]-1] == "SAFE"):
+            breeze[0] = pits[0]
+            breeze[1] = pits[1]-1
+            place_tile(board, breeze, "BREEZE")
+
+    #pit 3
     pits[0] = randint(1,3)
     pits[1] = randint(0,3)
     place_tile(board, pits, "PIT")
 
+    #Breeze allocaiton for pit 3
+    if (pits[0] < 3):
+        if (board[pits[0]+1][pits[1]] == "SAFE"):
+            breeze[0] = pits[0]+1
+            breeze[1] = pits[1]
+            place_tile(board, breeze, "BREEZE")
+    if (pits[0] > 0):
+        if (board[pits[0]-1][pits[1]] == "SAFE"):
+            breeze[0] = pits[0]-1
+            breeze[1] = pits[1]
+            place_tile(board, breeze, "BREEZE")
+    if (pits[1] < 3):
+        if (board[pits[0]][pits[1]+1] == "SAFE"):
+            breeze[0] = pits[0]
+            breeze[1] = pits[1]+1
+            place_tile(board, breeze, "BREEZE")
+    if (pits[1] > 0):
+        if (board[pits[0]][pits[1]-1] == "SAFE"):
+            breeze[0] = pits[0]
+            breeze[1] = pits[1]-1
+            place_tile(board, breeze, "BREEZE")
+
+    
     return;
 def outputBoard(board):
+
     for i in range(len(board)):
         for j in range(len(board[i])):
             print(" ", board[i][j], end = " ")
         print("\n")
     return;
+
+     
 
 board=[["SAFE","SAFE","SAFE","SAFE"],
         ["SAFE","SAFE","SAFE","SAFE"],
@@ -111,15 +184,42 @@ score=0
 
 player = [row, column]
 GenerateBoard(board)
-place_tile(board,player, "player")
+place_tile(board,player, "PLAYER")
+
+def resmell(board):
+    if (wumpyX < 3):
+        if (board[wumpyX+1][wumpyY] == "SAFE"):
+            smell[0] = wumpus[0]+1
+            smell[1] = wumpus[1]
+            place_tile(board, smell, "SMELL")
+    if (wumpyX > 0):
+        if (board[wumpyX-1][wumpyY] == "SAFE"):
+            smell[0] = wumpus[0]-1
+            smell[1] = wumpus[1]
+            place_tile(board, smell, "SMELL")
+    if (wumpyY < 3):
+        if (board[wumpyX][wumpyY+1] == "SAFE"):
+            smell[0] = wumpus[0]
+            smell[1] = wumpus[1]+1
+            place_tile(board, smell, "SMELL")
+    if (wumpyY > 0):
+        if (board[wumpyX][wumpyY-1] == "SAFE"):
+            smell[0] = wumpus[0]
+            smell[1] = wumpus[1]-1
+            place_tile(board, smell, "SMELL")
+        
 
 while(game):
     
     #user is given prompt and moves
     #movement logic
+    print("___________________________________")
+    #os.system("cls")
     outputBoard(board)
-    place_tile(board, player, "safe")
-    
+    place_tile(board, player, "SAFE")
+    resmell(board)
+
+
     choice=input("press w to move up\npress s to move down\npress a to move left\npress d to move right\n")
     if choice == "w":
         if row != 0: #not at top? go up one row
@@ -143,25 +243,46 @@ while(game):
             print("move denied")        
     else:
         print("move denied")
-    player = [row,column]
-    place_tile(board, player, "player")
-    time.sleep(1)
-    os.system("cls")
+    
+    if board[row][column] == "SAFE":
+        print("You are safe.")
+    if board[row][column] == 'BREEZE':
+        print("You feel a slight breeze.")
+    time.sleep(.5)
+    #Endgame conditions:
+    if (board[row][column] == "WUMPUS"):
+        score-=1000
+        print("\nWumpus here!!\n You Die\nAnd your score is: ",score
+              ,"\n")
+        game = False
+        break
+    if(board[row][column]=='GOLD'):
+        score+=1000
+        print("GOLD FOUND!You won....\nYour score is: ",score,"\n")
+        game = False
+        break
+    if(board[row][column]=='PIT'):
+        score-=1000
+        print("Ahhhhh!!!!\nYou fell in pit.\nAnd your score is: ",score,"\n")
+        game = False
+        break
+    
+      
+    
 
     #smell logic:
-    
-    if board[row][column]=="Smell" and arrow != False:
+    if board[row][column]=="SMELL" and arrow != False:
         yeet = input("do you want to throw an arrow-->\npress y to throw\npress n to save your arrow\n")
-        if keyboard.read_key() == "y":
+        if yeet == "y":
             yeet = input("press w to throw up\npress s to throw down\npress a to throw left\npress d to throw right\n")
             if yeet == "w":
                 if board[row-1][column] == "WUMPUS":
                     print("wumpus killed!")
                     score+=1000
                     print("score: ",score)
-                    board[row-1][column] = "Safe"
-                    board[1][0]="Safe"
-                    board[3][0]="Safe"
+                    board[row-1][column] = "SAFE"
+                    board[1][0]="SAFE"
+                    board[3][0]="SAFE"
                 else:
                     print("arrow wasted...")
                     score-=10
@@ -171,9 +292,9 @@ while(game):
                     print("wumpus killed!")
                     score+=1000
                     print("score: ",score)
-                    board[row+1][column] = "Safe"
-                    board[1][0]="Safe"
-                    board[3][0]="Safe"
+                    board[row+1][column] = "SAFE"
+                    board[1][0]="SAFE"
+                    board[3][0]="SAFE"
                 else:
                     print("arrow wasted...")
                     score-=10
@@ -183,9 +304,9 @@ while(game):
                     print("wumpus killed!")
                     score+=1000
                     print("score: ",score)
-                    board[row][column-1] = "Safe"
-                    board[1][0]="Safe"
-                    board[3][0]="Safe"
+                    board[row][column-1] = "SAFE"
+                    board[1][0]="SAFE"
+                    board[3][0]="SAFE"
                 else:
                     print("arrow wasted...")
                     score-=10
@@ -195,9 +316,9 @@ while(game):
                     print("wumpus killed!")
                     score+=1000
                     print("score: ",score)
-                    board[row][column+1] = "Safe"
-                    board[1][0]="Safe"
-                    board[3][0]="Safe"
+                    board[row][column+1] = "SAFE"
+                    board[1][0]="SAFE"
+                    board[3][0]="SAFE"
                 else:
                     print("arrow wasted...")
                     score-=10
@@ -205,19 +326,5 @@ while(game):
                 
             
             arrow=False
-    #endgame conditions:
-    if board[row][column] == "WUMPUS" :
-        score-=1000
-        print("\nWumpus here!!\n You Die\nAnd your score is: ",score
-              ,"\n")
-        break
-    if(board[row][column]=='GOLD'):
-        score+=1000
-        print("GOLD FOUND!You won....\nYour score is: ",score,"\n")
-        break
-    if(board[row][column]=='PIT'):
-        score-=1000
-        print("Ahhhhh!!!!\nYou fell in pit.\nAnd your score is: ",score,"\n")
-        break
-    
-
+    player = [row,column]
+    place_tile(board, player, "PLAYER") 
