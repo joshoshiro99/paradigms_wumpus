@@ -215,9 +215,10 @@ while(game):
     #movement logic
     print("___________________________________")
     #os.system("cls")
+    resmell(board)
     outputBoard(board)
     place_tile(board, player, "SAFE")
-    resmell(board)
+    
 
 
     choice=input("press w to move up\npress s to move down\npress a to move left\npress d to move right\n")
@@ -280,6 +281,7 @@ while(game):
                     print("wumpus killed!")
                     score+=1000
                     print("score: ",score)
+                    time.sleep(.5)
                     board[row-1][column] = "SAFE"
                     board[1][0]="SAFE"
                     board[3][0]="SAFE"
@@ -287,11 +289,13 @@ while(game):
                     print("arrow wasted...")
                     score-=10
                     print("score: ",score)
+                    time.sleep(.5)
             elif yeet == "s":
                 if board[row+1][column] == "WUMPUS":
                     print("wumpus killed!")
                     score+=1000
                     print("score: ",score)
+                    time.sleep(.5)
                     board[row+1][column] = "SAFE"
                     board[1][0]="SAFE"
                     board[3][0]="SAFE"
@@ -299,11 +303,13 @@ while(game):
                     print("arrow wasted...")
                     score-=10
                     print("score: ",score)
+                    time.sleep(.5)
             elif yeet == "a":
                 if board[row][column-1] == "WUMPUS":
                     print("wumpus killed!")
                     score+=1000
                     print("score: ",score)
+                    time.sleep(.5)
                     board[row][column-1] = "SAFE"
                     board[1][0]="SAFE"
                     board[3][0]="SAFE"
@@ -311,11 +317,13 @@ while(game):
                     print("arrow wasted...")
                     score-=10
                     print("score: ",score)
+                    time.sleep(.5)
             elif yeet == "d":
                 if board[row][column+1] == "WUMPUS":
                     print("wumpus killed!")
                     score+=1000
                     print("score: ",score)
+                    time.sleep(.5)
                     board[row][column+1] = "SAFE"
                     board[1][0]="SAFE"
                     board[3][0]="SAFE"
@@ -323,6 +331,7 @@ while(game):
                     print("arrow wasted...")
                     score-=10
                     print("score: ",score)
+                    time.sleep(.5)
                 
             
             arrow=False
